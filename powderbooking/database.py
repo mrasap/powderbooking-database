@@ -18,13 +18,13 @@ from typing import List
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.engine import Engine, Connection, ResultProxy
 
-from database.models import model_resort, model_weather, model_forecast
-from database.query import Query
+from powderbooking.models import model_resort, model_weather, model_forecast
+from powderbooking.query import Query
 
 
 class DatabaseHandler:
     """
-    Database handler to manage all database interactions in one place.
+    Database handler to manage all powderbooking interactions in one place.
 
     inspired by: https://github.com/rshk/flask-sqlalchemy-core/
     """
@@ -50,7 +50,7 @@ class DatabaseHandler:
     @contextmanager
     def connect(self) -> Connection:
         """
-        Connect to the database, ensures that the connection is closed once all transactions have occurred.
+        Connect to the powderbooking, ensures that the connection is closed once all transactions have occurred.
         """
         with self.engine.connect() as conn:
             yield conn
@@ -58,7 +58,7 @@ class DatabaseHandler:
 
     def execute(self, *args, **kwargs) -> ResultProxy:
         """
-        Execute the inserted args and kwargs onto the database and return the ResultProxy.
+        Execute the inserted args and kwargs onto the powderbooking and return the ResultProxy.
         """
         with self.connect() as conn:
             return conn.execute(*args, **kwargs)
@@ -77,7 +77,7 @@ class DatabaseHandler:
     def insert(self, table: str, values: List[dict]) -> ResultProxy:
         """
         Insert the inserted list of values into the table that is given.
-        Will raise a ValueError if the table is not inside the database.
+        Will raise a ValueError if the table is not inside the powderbooking.
 
         :param table: the name of the table that should be inserted into.
         :param values: a list of new rows that should be inserted.
@@ -85,5 +85,5 @@ class DatabaseHandler:
         """
         print('attempting to insert list:', values)
         if table not in self.metadata.tables.keys():
-            raise ValueError(f'{table} not in the tables of the database')
+            raise ValueError(f'{table} not in the tables of the powderbooking')
         return self.execute(self.metadata.tables[table].insert(), values)

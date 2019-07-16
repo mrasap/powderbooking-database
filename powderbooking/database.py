@@ -15,7 +15,7 @@
 from contextlib import contextmanager
 from typing import List
 
-from sqlalchemy import create_engine, MetaData
+from sqlalchemy import create_engine, MetaData, Table, Column
 from sqlalchemy.engine import Engine, Connection, ResultProxy
 
 from powderbooking.models import model_resort, model_weather, model_forecast
@@ -74,16 +74,37 @@ class DatabaseHandler:
         """
         return self.execute(query.value, *args, **kwargs)
 
-    def insert(self, table: str, values: List[dict]) -> ResultProxy:
+    def get_table(self, table_name: str) -> Table:
+        """
+        Get the table from the metadata.
+
+        :param table_name: the name of the table that should be retrieved
+        :return: the Table object.
+        """
+        if table_name not in self.metadata.tables.keys():
+            raise ValueError(f'{table_name} not in the tables of powderbooking')
+        return self.metadata.tables[table_name]
+
+    def get_table_column(self, table_name: str, column_name: str) -> Column:
+        """
+        Get the column of the particular table from the metadata.
+
+        :param table_name: the name of the table that
+        :param table_name: the name of the column that should be retrieved
+        :return: the Column object.
+        """
+        table = self.get_table(table_name=table_name)
+        if column_name not in table.columns:
+            raise ValueError(f'{column_name} not in the columns of the table {table_name} of powderbooking')
+        return table.columns[column_name]
+
+    def insert(self, table_name: str, values: List[dict]) -> ResultProxy:
         """
         Insert the inserted list of values into the table that is given.
         Will raise a ValueError if the table is not inside the powderbooking.
 
-        :param table: the name of the table that should be inserted into.
+        :param table_name: the name of the table that should be inserted into.
         :param values: a list of new rows that should be inserted.
         :return: the ResultProxy.
         """
-        print('attempting to insert list:', values)
-        if table not in self.metadata.tables.keys():
-            raise ValueError(f'{table} not in the tables of the powderbooking')
-        return self.execute(self.metadata.tables[table].insert(), values)
+        return self.execute(self.get_table(table_name).insert(), values)

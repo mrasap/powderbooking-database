@@ -1,15 +1,9 @@
 from setuptools import setup
 
 
-def readme():
-    with open('README.md') as f:
-        return f.read()
-
-
 setup(name='powderbooking',
-      version='0.3',
+      version='0.3.1',
       description='Application to show the best hotels with the weather',
-      long_description=readme(),
       classifiers=[
           'Development Status :: 3 - Alpha',
           'License :: OSI Approved :: Apache Software License',

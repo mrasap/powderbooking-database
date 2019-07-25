@@ -40,19 +40,22 @@ def model_resort(metadata: MetaData) -> Table:
 
 def model_weather(metadata: MetaData) -> Table:
     return Table('weather', metadata,
-                 Column('id', Integer, Sequence('weather_id_seq'), primary_key=True),
-                 Column('resort_id', Integer, ForeignKey('resort.id', onupdate="CASCADE", ondelete="CASCADE")),
-                 Column('date_request', DateTime),
-                 Column('dt', DateTime),  # straight from api
-                 Column('date', Date),  # derived from dt
-                 Column('timepoint', Integer, default=-1),  # ordinal, categorized every 3 hour (range 0-7)
-                 Column('temperature_c', Float),
-                 Column('wind_speed_kmh', Float),
-                 Column('wind_direction_deg', Float),
-                 Column('visibility_km', Float),
-                 Column('clouds_pct', Float),
-                 Column('snow_3h_mm', Float),
-                 Column('rain_3h_mm', Float),
+                 Column('id', Integer, Sequence('weather_id_seq'), primary_key=True,
+                        comment='The identifier of the weather report'),
+                 Column('resort_id', Integer, ForeignKey('resort.id', onupdate='CASCADE', ondelete='CASCADE'),
+                        comment='Foreign key to the related resort'),
+                 Column('date_request', DateTime, comment='The date on which the weather was requested by the scraper'),
+                 Column('dt', DateTime, comment='The datetime as given by the scraped api'),
+                 Column('date', Date, comment='The date derived from dt'),
+                 Column('timepoint', Integer, default=-1,
+                        comment='Ordinal timepoint of the day, categorized every 3 hours (range 0-7)'),
+                 Column('temperature_c', Float, comment='The temperature in Celsius'),
+                 Column('wind_speed_kmh', Float, comment='The wind speed in kilometres per hour'),
+                 Column('wind_direction_deg', Float, comment='The wind direction in degrees'),
+                 Column('visibility_km', Float, comment='The visibility in kilometres'),
+                 Column('clouds_pct', Float, comment='The amount of clouds in percentage'),
+                 Column('snow_3h_mm', Float, comment='The amount of snow in the last 3 hours in millimetres'),
+                 Column('rain_3h_mm', Float, comment='The amount of rain in the last 3 hours in millimetres'),
                  UniqueConstraint('date', 'timepoint', 'resort_id'),
                  )
 

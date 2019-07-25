@@ -15,15 +15,18 @@
 
 from enum import Enum
 
+from sqlalchemy import text
+
 
 class Query(Enum):
     """
-    This Enum is used to store all the queries that are used by the application.
+    This Enum is used to create a framework to store the queries that are used by the application.
+    Of course, you can also create your own Query Enum in your own module.
 
     source to execute raw sql with sqlalchemy:
     https://chartio.com/resources/tutorials/how-to-execute-raw-sql-in-sqlalchemy/
     """
-    select_forecast_24h = f"""
+    select_forecast_24h = text("""
         SELECT r.id, lat, lng
         FROM resort as r
         LEFT JOIN (SELECT id, resort_id
@@ -32,9 +35,9 @@ class Query(Enum):
                    and timepoint = 0
                    ) as f on r.id = f.resort_id
         WHERE f.id is NULL
-    """
+    """)
 
-    select_weather_3h = f"""
+    select_weather_3h = text("""
         SELECT r.id, lat, lng
         FROM resort as r
         LEFT JOIN (SELECT id, resort_id 
@@ -42,4 +45,4 @@ class Query(Enum):
                    WHERE date_request > current_timestamp - 3 * interval '1 hour'
                    ) as w on r.id = w.resort_id
         WHERE w.id is NULL
-    """
+    """)

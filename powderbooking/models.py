@@ -66,15 +66,23 @@ def model_forecast(metadata: MetaData) -> Table:
                  Column('resort_id', Integer, ForeignKey('resort.id', onupdate="CASCADE", ondelete="CASCADE")),
                  Column('date_request', DateTime),
                  Column('date', Date),
-                 Column('timepoint', Integer),  # straight from api
+                 Column('timepoint', Integer),
                  Column('temperature_max_c', Float),
                  Column('temperature_min_c', Float),
                  Column('rain_total_mm', Float),
-                 Column('rain_week_mm', Float),
                  Column('snow_total_mm', Float),
-                 Column('snow_week_mm', Float),
                  Column('prob_precip_pct', Float),
                  Column('wind_speed_max_kmh', Float),
                  Column('windgst_max_kmh', Float),
                  UniqueConstraint('date', 'timepoint', 'resort_id'),
+                 )
+
+
+def model_forecast_week(metadata: MetaData) -> Table:
+    return Table('forecast_week', metadata,
+                 Column('id', Integer, Sequence('forecast_week__id_seq'), primary_key=True),
+                 Column('forecast_id', Integer, ForeignKey('forecast.id', onupdate="CASCADE", ondelete="CASCADE"),
+                        unique=True),
+                 Column('rain_week_mm', Float),
+                 Column('snow_week_mm', Float),
                  )

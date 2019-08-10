@@ -18,7 +18,7 @@ from typing import List
 from sqlalchemy import create_engine, MetaData, Table, Column
 from sqlalchemy.engine import Engine, Connection, ResultProxy
 
-from powderbooking.models import model_resort, model_weather, model_forecast
+from powderbooking.models import model_resort, model_weather, model_forecast, model_forecast_week
 from powderbooking.query import Query
 
 
@@ -42,6 +42,7 @@ class DatabaseHandler:
         model_resort(metadata)
         model_weather(metadata)
         model_forecast(metadata)
+        model_forecast_week(metadata)
 
         metadata.create_all(engine)
 

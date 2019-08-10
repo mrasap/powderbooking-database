@@ -80,11 +80,11 @@ def model_forecast(metadata: MetaData) -> Table:
 
 def model_forecast_week(metadata: MetaData) -> Table:
     return Table('forecast_week', metadata,
-                 Column('id', Integer, Sequence('forecast_week__id_seq'), primary_key=True),
-                 Column('resort_id', Integer, ForeignKey('resort.id', onupdate="CASCADE", ondelete="CASCADE"),
-                        unique=True),
+                 Column('id', Integer, Sequence('forecast_week_id_seq'), primary_key=True),
+                 Column('resort_id', Integer, ForeignKey('resort.id', onupdate="CASCADE", ondelete="CASCADE")),
                  Column('date_request', DateTime),
                  Column('date', Date),
                  Column('rain_week_mm', Float),
                  Column('snow_week_mm', Float),
+                 UniqueConstraint('date', 'resort_id'),
                  )

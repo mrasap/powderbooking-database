@@ -2,7 +2,7 @@ from setuptools import setup
 
 
 setup(name='powderbooking',
-      version='0.4.0',
+      version='0.4.1',
       description='Application to show the best hotels with the weather',
       classifiers=[
           'Development Status :: 3 - Alpha',
